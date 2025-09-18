@@ -7,11 +7,13 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 
 앙상블 학습(Voting, Gradient Boosting), PCA 차원 축소 등의 기법을 적용해 정확도 변화를 관찰한다.
 
+<br>
 
 ### 프로젝트 기간
 
 📆 2023.05 ~ 2023.06
 
+<br>
 
 ### - 목차 -
 
@@ -26,6 +28,11 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 ▫ 앙상블 학습과 PCA 
 
 ▫ 앙상블과 PCA 적용 시 변화
+
+<br>
+
+### 소스코드
+[🔗 SVM Digits Notebook 바로가기](svm_digits.ipynb)
 
 <br>
 
@@ -66,10 +73,10 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 • 이 점들은 분류 경계를 정의하는 데 직접적인 영향을 주며, 마진의 크기를 결정하는 기준임
 
 • SVM은 훈련 데이터 전부가 아니라 **Support Vector에만 의존**하여 모델을 만듦
-
+<br>
 
 ---
-
+<br>
 
 ## ◈ 커널 함수(Kernel Function)의 필요성
 
@@ -97,10 +104,10 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 🔸 **RBF (Radial Basis Function, Gaussian)**: 국소적으로 곡선 경계를 만들어 복잡한 패턴 분류에 강함
 
 🔸 **Sigmoid**: 신경망의 활성화 함수(sigmoid)와 유사한 방식으로 비선형 경계를 생성함
-
+<br>
 
 ---
-
+<br>
 
 ## ◈ GridSearchCV (Grid Search + Cross Validation)
 
@@ -165,10 +172,10 @@ param_grid = {
 − ``.best_estimator_``: 최적 모델 객체
 
 − ``.cv_results_``: 각 조합별 점수
-
+<br>
 
 ---
-
+<br>
 
 ## ◈ 커널에 따른 성능 비교
 
@@ -223,10 +230,10 @@ Test Accuracy: **0.977**
 
 > [!IMPORTANT]
 > Sigmoid 커널은 기본 파라미터에서 다른 커널에 비해 성능이 낮게 나타났다 (93.05%). <br><br> 이는 Sigmoid가 데이터 특성과 잘 맞지 않으며, 기본값에서는 **과소적합**된 상태였기 때문이다. <br><br> 그러나 GridSearchCV로 C와 gamma를 최적화한 결과, **정확도가 97.7%까지 크게 향상**됐다. <br><br> 다만 RBF 커널이 여전히 더 높은 성능을 보였다는 점에서, Digits 데이터셋에 RBF가 가장 적합한 커널임을 확인할 수 있다.
-
+<br>
 
 ---
-
+<br>
 
 ## ◈ 앙상블 학습 (Ensemble Learning)
 
@@ -261,10 +268,10 @@ Test Accuracy: **0.977**
 🔸시각화 용이: 고차원 데이터를 2D 및 3D로 표현 가능
 
 🔸연산 효율 향상: 계산 복잡도를 줄이고 학습 속도 개선
-
+<br>
 
 ---
-
+<br>
 
 ## ◈ 앙상블과 PCA 적용 시 변화
 
@@ -292,4 +299,4 @@ Test Accuracy: **0.977**
 <img src="images/svm7.png" alt="pca" width="700"/>
 
 > [!CAUTION]
-> Advises about risks or negative outcomes of certain actions.
+> 앙상블을 적용한 결과, 기존 RBF SVM 단일 모델 (0.9805)보다 정확도가 **소폭 상승**했다. (0.9833) <br><br> 이는 Gradient Boosting이 보완적인 학습방식을 제공하면서, SVM 단일 모델의 약점을 보완했다고 볼 수 있다. <br><br> 그러나 데이터셋이 비교적 단순하기 때문에 큰 폭의 향상은 나타나지 않았다. <br><br> 반면 PCA로 차원을 64 → 30으로 줄인 뒤 RBF SVM을 적용했더니, 오히려 **정확도가 감소**했다. <br><br> Digits 데이터셋은 원래 차원이 높지 않고, 이미지 픽셀 간 상관관계가 뚜렷해 <br><br> **차원 축소가 정보 손실**로 이어진 것으로 보인다. 단순한 구조에서는 오히려 불리할 수 있음을 보여준다.
