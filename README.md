@@ -1,6 +1,5 @@
 # SVM 커널 비교와 최적화
 
-<br>
 
 손글씨 숫자 이미지(Digits dataset)를 대상으로 SVM 분류기를 적용하고 Linear, RBF, Sigmoid 커널의 성능을 비교한다.
 
@@ -8,13 +7,11 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 
 앙상블 학습(Voting, Gradient Boosting), PCA 차원 축소 등의 기법을 적용해 정확도 변화를 관찰한다.
 
-<br>
 
 ### 프로젝트 기간
 
 📆 2023.05 ~ 2023.06
 
-<br>
 
 ### - 목차 -
 
@@ -70,9 +67,9 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 
 • SVM은 훈련 데이터 전부가 아니라 **Support Vector에만 의존**하여 모델을 만듦
 
-<br>
 
 ---
+
 
 ## ◈ 커널 함수(Kernel Function)의 필요성
 
@@ -101,9 +98,9 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 
 🔸 **Sigmoid**: 신경망의 활성화 함수(sigmoid)와 유사한 방식으로 비선형 경계를 생성함
 
-<br>
 
 ---
+
 
 ## ◈ GridSearchCV (Grid Search + Cross Validation)
 
@@ -133,7 +130,7 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 <br>
 
 > [!IMPORTANT]
-> 즉, 하이퍼파라미터는 SVM이 추구하는 초평면의 **위치와 모양**에 직접적인 영향을 준다. <br><br> 따라서 하이퍼파라미터 최적화는 단순히 성능 개선보다는, SVM이 데이터 특성에 적절히 적응하도록 만드는 **필수 절차**이다. <br><br> 하지만 어떤 C와 gamma가 최적인지는 데이터셋마다 다르다.
+> 즉, 하이퍼파라미터는 SVM이 추구하는 초평면의 **위치와 모양**에 직접적인 영향을 준다. <br><br> 따라서 하이퍼파라미터 최적화는 단지 성능 개선보다는, SVM이 데이터 특성에 적절히 적응하도록 만드는 **필수 절차**다. <br><br> 하지만 어떤 C와 gamma가 최적인지는 데이터셋마다 다르다.
 
 <br>
 
@@ -169,9 +166,9 @@ param_grid = {
 
 − ``.cv_results_``: 각 조합별 점수
 
-<br>
 
 ---
+
 
 ## ◈ 커널에 따른 성능 비교
 
@@ -225,11 +222,11 @@ Test Accuracy: **0.977**
 <img src="images/svm5.png" alt="gird_sigmoid SVM" width="600"/>
 
 > [!IMPORTANT]
-> Sigmoid 커널은 기본 파라미터에서 다른 커널에 비해 성능이 낮게 나타났다 (93.05%). <br><br> 이는 Sigmoid가 데이터 특성과 잘 맞지 않으며, 기본값에서는 **과소적합**된 상태였기 때문이다. <br><br> 그러나 GridSearchCV로 C와 gamma를 최적화한 결과, **정확도가 97.7%까지 크게 향상**됐다. <br><br> 다만 RBF 커널이 여전히 더 높은 성능을 보였다는 점에서, Digits 데이터셋에서 RBF가 가장 적합한 커널임을 확인할 수 있다.
+> Sigmoid 커널은 기본 파라미터에서 다른 커널에 비해 성능이 낮게 나타났다 (93.05%). <br><br> 이는 Sigmoid가 데이터 특성과 잘 맞지 않으며, 기본값에서는 **과소적합**된 상태였기 때문이다. <br><br> 그러나 GridSearchCV로 C와 gamma를 최적화한 결과, **정확도가 97.7%까지 크게 향상**됐다. <br><br> 다만 RBF 커널이 여전히 더 높은 성능을 보였다는 점에서, Digits 데이터셋에 RBF가 가장 적합한 커널임을 확인할 수 있다.
 
-<br>
 
 ---
+
 
 ## ◈ 앙상블 학습 (Ensemble Learning)
 
@@ -249,8 +246,6 @@ Test Accuracy: **0.977**
 
 <br>
 
----
-
 ## ◈ 차원 축소 (PCA)
 
 • PCA는 고차원 데이터를 주요한 성분(Principal Components)으로 변환해, 차원을 축소하는 기법임
@@ -267,9 +262,9 @@ Test Accuracy: **0.977**
 
 🔸연산 효율 향상: 계산 복잡도를 줄이고 학습 속도 개선
 
-<br>
 
 ---
+
 
 ## ◈ 앙상블과 PCA 적용 시 변화
 
@@ -278,7 +273,7 @@ Test Accuracy: **0.977**
 • RBF 기반 모델을 더욱 개선할 수 있는 방법으로 앙상블 학습과 PCA(차원 축소)를 적용해봄
 
 > [!NOTE]
-> 실험에 쓰인 앙상블 기법은 2개로, **Gradient Boosting**과 **Soft Voting**이다. <br><br> Gradient Boosting은 **손실 함수**의 그래디언트 방향으로 오차를 줄여나가면서 학습한다. <br><br> Soft Voting은 각 분류기가 예측한 확률을 평균해서 최종 클래스를 결정한다. <br><br> 따라서 Soft Voting을 통해 RBF SVM과 Gradient Boosting을 결합하여, 두 모델의 장점을 함께 활용할 수 있다.
+> 실험에 쓰인 앙상블 기법은 2개로, **Gradient Boosting**과 **Soft Voting**이다. <br><br> Gradient Boosting은 **손실 함수**의 그래디언트 방향으로 오차를 줄여나가면서 학습한다. <br><br> Soft Voting은 각 분류기가 예측한 **확률을 평균**해서 최종 클래스를 결정한다. <br><br> 따라서 Soft Voting을 통해 RBF SVM과 Gradient Boosting을 결합하여, 두 모델의 장점을 함께 활용할 수 있다.
 
 <br>
 
