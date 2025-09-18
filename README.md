@@ -14,9 +14,21 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 
 📆 2023.05 ~ 2023.06
 
+<br>
 
 ### - 목차 -
 
+▫ SVM이란?
+
+▫ 커널 함수의 필요성
+
+▫ GridSearchCV
+
+▫ 커널에 따른 성능 비교
+
+▫ 앙상블 학습과 PCA 
+
+▫ 앙상블과 PCA 적용 시 변화
 
 <br>
 
@@ -29,6 +41,7 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 • 이때 클래스 간 간격(**margin**)을 최대로 확보하는 경계를 선택한다는 점에서, 다른 선형 분류기와 차별됨
 
 • SVM은 이미지 인식, 텍스트 분류 등에 활용되며 데이터 차원이 높아도 강력한 성능을 보임
+
 <br>
 
 <img src="images/svm.png" alt="SVM Concept" width="400"/>
@@ -59,6 +72,8 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 
 <br>
 
+---
+
 ## ◈ 커널 함수(Kernel Function)의 필요성
 
 • 현실 세계의 데이터는 단순히 직선(선형)만으로 구분하기 어려움
@@ -68,6 +83,8 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 • SVM은 이같은 커널 트릭(Kernel Trick)을 이용함
 
 • SVM은 기본적으로 **선형 분류기**이고, 커널은 이를 **비선형 문제**로 확장시켜주는 도구
+
+<br>
 
 <img src="images/kernel.png" alt="SVM Concept" width="700"/>
 
@@ -85,6 +102,8 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
 🔸 **Sigmoid**: 신경망의 활성화 함수(sigmoid)와 유사한 방식으로 비선형 경계를 생성함
 
 <br>
+
+---
 
 ## ◈ GridSearchCV (Grid Search + Cross Validation)
 
@@ -111,6 +130,8 @@ GridSearchCV를 통해 하이퍼파라미터를 최적화하고
     - **gamma를 크게 잡을 시**: 영향 범위가 좁아 경계가 세밀하게 휘어짐 => 과적합 위험 가능성
     - **gamma를 작게 잡을 시**: 영향 범위가 넓어져 경계가 단순해짐 => 과소적합 위험 가능성
 
+<br>
+
 > [!IMPORTANT]
 > 즉, 하이퍼파라미터는 SVM이 추구하는 초평면의 **위치와 모양**에 직접적인 영향을 준다. <br><br> 따라서 하이퍼파라미터 최적화는 단순히 성능 개선보다는, SVM이 데이터 특성에 적절히 적응하도록 만드는 **필수 절차**이다. <br><br> 하지만 어떤 C와 gamma가 최적인지는 데이터셋마다 다르다.
 
@@ -128,12 +149,13 @@ param_grid = {
     'gamma': [0.001, 0.01, 0.1]
 }
 ```
+<br>
 
 ### ∗ CV = 교차 검증
 
 • 각 조합을 평가할 때 train/test를 한 번만 나누면, 우연히 좋은 split에 속을 수 있음
 
-• 따라서 **cv=5** 같은 식으로 데이터를 5등분 => 학습/검증을 5번 반복함으로써 평균 성능으로 평가할 수 있음
+• 따라서 **cv=5** 같은 식으로 데이터를 5등분 => 학습/검증을 5번 반복함으로써 **평균 성능**으로 평가할 수 있음
 
 • 더 일반화된 최적 파라미터를 찾기 위한 방법
 
@@ -146,3 +168,133 @@ param_grid = {
 − ``.best_estimator_``: 최적 모델 객체
 
 − ``.cv_results_``: 각 조합별 점수
+
+<br>
+
+---
+
+## ◈ 커널에 따른 성능 비교
+
+• 사용 데이터: sklearn Digits Dataset (8×8 손글씨 숫자 이미지, 클래스 10개)
+
+• 데이터 전처리: StandardScaler로 스케일링 수행
+
+• 데이터 분할: 훈련(80%) / 테스트(20%) / random_state=42 고정
+
+<br>
+
+### < Linear SVM >
+
+Test Accuracy: **0.975**
+
+<img src="images/svm1.png" alt="Linear SVM" width="700"/>
+
+<br>
+
+### < RBF SVM >
+
+Test Accuracy: **0.9805**
+
+<img src="images/svm2.png" alt="RBF SVM" width="600"/>
+
+<br>
+
+### < RBF SVM에 GridSearchCV 적용 >
+
+Test Accuracy: **0.9805**
+
+<img src="images/svm3.png" alt="Grid RBF SVM" width="600"/>
+
+> [!WARNING]
+> Linear SVM은 비교적 단순한 모델임에도 불구하고 높은 정확도(97.5%)를 달성했다. <br><br> RBF SVM은 비선형 결정 경계를 학습할 수 있어 정확도가 소폭 상승(98.05%)했다. <br><br> 그러나 GridSearchCV로 하이퍼파라미터를 최적화했음에도 동일한 정확도가 나온 것은, <br><br> Digits 데이터셋이 크기가 작고 단순해 기본 파라미터로도 이미 **최적 근처**의 성능을 낸 것으로 해석된다.
+
+<br>
+
+### < Sigmoid SVM >
+
+Test Accuracy: **0.9305**
+
+<img src="images/svm4.png" alt="sigmoid SVM" width="600"/>
+
+<br>
+
+### < Sigmoid SVM에 GridSearchCV 적용 >
+
+Test Accuracy: **0.977**
+
+<img src="images/svm5.png" alt="gird_sigmoid SVM" width="600"/>
+
+> [!IMPORTANT]
+> Sigmoid 커널은 기본 파라미터에서 다른 커널에 비해 성능이 낮게 나타났다 (93.05%). <br><br> 이는 Sigmoid가 데이터 특성과 잘 맞지 않으며, 기본값에서는 **과소적합**된 상태였기 때문이다. <br><br> 그러나 GridSearchCV로 C와 gamma를 최적화한 결과, **정확도가 97.7%까지 크게 향상**됐다. <br><br> 다만 RBF 커널이 여전히 더 높은 성능을 보였다는 점에서, Digits 데이터셋에서 RBF가 가장 적합한 커널임을 확인할 수 있다.
+
+<br>
+
+---
+
+## ◈ 앙상블 학습 (Ensemble Learning)
+
+• 앙상블 학습은 여러 개의 **개별 학습기**(weak learners)를 조합해, 단일 모델보다 더 나은 예측 성능을 얻는 기법임 
+
+• "여럿이 모이면 더 강해진다"는 아이디어에서 출발했으며, 1990년대에 본격적으로 주목받기 시작함
+
+<br>
+
+### ∗ 주요 기법
+
+🔸**Bagging** (Bootstrap Aggregating): 같은 모델을 여러 번 훈련하고 평균/투표로 최종 결정을 내림
+
+🔸**Boosting**: 여러 약한 분류기를 순차적으로 학습시키며, 이전 모델이 틀린 부분을 보완함
+
+🔸**Voting**: 서로 다른 종류의 모델을 결합해, 다수결(하드 보팅) 또는 확률 평균(소프트 보팅)으로 최종 결정을 내림
+
+<br>
+
+---
+
+## ◈ 차원 축소 (PCA)
+
+• PCA는 고차원 데이터를 주요한 성분(Principal Components)으로 변환해, 차원을 축소하는 기법임
+
+• 데이터의 **분산**을 가장 잘 설명하는 축을 찾아, 원래 데이터의 정보를 최대한 보존하면서 차원을 줄이는 것이 목적임
+
+<br>
+
+### ∗ 주요 의의
+
+🔸차원 축소: 불필요한 변수 제거로 모델 단순화
+
+🔸시각화 용이: 고차원 데이터를 2D 및 3D로 표현 가능
+
+🔸연산 효율 향상: 계산 복잡도를 줄이고 학습 속도 개선
+
+<br>
+
+---
+
+## ◈ 앙상블과 PCA 적용 시 변화
+
+• 앞선 실험에서 SVM의 다양한 커널을 비교한 결과, RBF 커널이 Digits 데이터셋을 분류하는 데 가장 적합했음
+
+• RBF 기반 모델을 더욱 개선할 수 있는 방법으로 앙상블 학습과 PCA(차원 축소)를 적용해봄
+
+> [!NOTE]
+> 실험에 쓰인 앙상블 기법은 2개로, **Gradient Boosting**과 **Soft Voting**이다. <br><br> Gradient Boosting은 **손실 함수**의 그래디언트 방향으로 오차를 줄여나가면서 학습한다. <br><br> Soft Voting은 각 분류기가 예측한 확률을 평균해서 최종 클래스를 결정한다. <br><br> 따라서 Soft Voting을 통해 RBF SVM과 Gradient Boosting을 결합하여, 두 모델의 장점을 함께 활용할 수 있다.
+
+<br>
+
+### < RBF SVM에 Soft Voting 앙상블 적용 >
+
+Test Accuracy: **0.9833**
+
+<img src="images/svm6.png" alt="soft_Voting" width="700"/>
+
+<br>
+
+### < RBF SVM에 PCA 적용 >
+
+Test Accuracy: **0.977**
+
+<img src="images/svm7.png" alt="pca" width="700"/>
+
+> [!CAUTION]
+> Advises about risks or negative outcomes of certain actions.
